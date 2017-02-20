@@ -17,7 +17,12 @@ public class Action {
 	@Override
 	public String toString(){
 		if(this.position1 != null && this.position2 != null){
-			return "(move " + this.position1.x + " " + this.position1.y + " " + this.position2.x + " " + this.position2.y + ")";
+			int x1 = this.position1.x +1;
+			int y1 = this.position1.y +1;
+			int x2 = this.position2.x +1;
+			int y2 = this.position2.y +1;
+			
+			return "(move " + x1  + " " + y1 + " " + x2 + " " + y2 + ")";
 		}
 		return "noop";
 	}

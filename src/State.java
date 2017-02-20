@@ -18,26 +18,26 @@ public class State {
 			
 			if(board.role.equals("white")){
 				if(board.blackPawns.containsKey(action.position2)){
-					score++;
-					return score;
+					this.score++;
+					return this.score;
 				}
 				if(this.goalState()){
-					score += 100;
-					return score;
+					this.score += 100;
+					return this.score;
 				}
 			}
 			else{
 				if(board.whitePawns.containsKey(action.position2)){
-					score++;
-					return score;
+					this.score++;
+					return this.score;
 				}
 				if(goalState()){
-					score += 100;
-					return score;
+					this.score += 100;
+					return this.score;
 				}
 			}
 			
-			return score;
+			return this.score;
 			
 			// TODO 
 			// +1 if capture
@@ -60,7 +60,7 @@ public class State {
 	public boolean goalState(){
 		if(board.role.equals("white")){
 			for(Coordinate pawn : board.whitePawns.keySet()){
-				if(pawn.y == board.length){
+				if(pawn.y +1 == board.length){
 					return true;
 				}
 			}
@@ -82,7 +82,11 @@ public class State {
 		
 		if(role.equals("white")){	//White
 			for(Coordinate coord : board.whitePawns.keySet()){	//move forward
-				if(!board.blackPawns.containsKey(new Coordinate(coord.x, coord.y +1)) || !board.whitePawns.containsKey(new Coordinate(coord.x, coord.y +1))){
+				if(this.board.length <= coord.y +1){	//If pawn goes out of the board
+					//do nothing
+					continue;
+				}
+				if(!board.blackPawns.containsKey(new Coordinate(coord.x, coord.y +1)) && !board.whitePawns.containsKey(new Coordinate(coord.x, coord.y +1))){
 					Action forward = new Action(coord, new Coordinate(coord.x, coord.y +1));
 					legalActions.add(forward);
 				}
@@ -98,7 +102,11 @@ public class State {
 		}
 		else{	//Black
 			for(Coordinate coord : board.blackPawns.keySet()){	//move forward
-				if(!board.blackPawns.containsKey(new Coordinate(coord.x, coord.y -1)) || !board.whitePawns.containsKey(new Coordinate(coord.x, coord.y -1))){
+				if(0 >= coord.y +1){	//If pawn goes out of the board
+					//do nothing
+					continue;
+				}
+				if(!board.blackPawns.containsKey(new Coordinate(coord.x, coord.y -1)) && !board.whitePawns.containsKey(new Coordinate(coord.x, coord.y -1))){
 					Action forward = new Action(coord, new Coordinate(coord.x, coord.y -1));
 					legalActions.add(forward);
 				}

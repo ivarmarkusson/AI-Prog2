@@ -32,6 +32,9 @@ public class Board {
 				
 				switch(i){
 					case 0:
+						color = "white";
+						yCoord = i;
+						break;
 					case 1:
 						color = "white";
 						yCoord = i;
@@ -47,6 +50,7 @@ public class Board {
 					default:
 						color = "";
 						yCoord = -1;
+						break;
 				}
 				
 				Coordinate location = new Coordinate(j, yCoord);
@@ -71,7 +75,10 @@ public class Board {
 		this.length = copy.length;
 		this.role = copy.role;
 		this.time = copy.time;
-		this.currentState = copy.currentState;
+		
+		State newState = new State(copy, copy.currentState.firstActionToState, copy.currentState.score);
+		this.currentState = newState;
+		
 		this.whitePawns = new HashMap<Coordinate, Pawn>(copy.whitePawns);
 		this.blackPawns = new HashMap<Coordinate, Pawn>(copy.blackPawns);
 	}
@@ -113,21 +120,30 @@ public class Board {
 	
 	@Override
 	public String toString(){
-		String builder = "";
+		String[] builder = new String[this.length];
 		for(int i = 0; i < this.length; i++){
+			String stringBuilder = "";
 			for(int j = 0; j < this.width; j++){
 				if(this.whitePawns.containsKey(new Coordinate(j,i))){
-					builder += "| W |";
+					stringBuilder += "| W |";
 				}
 				else if(this.blackPawns.containsKey(new Coordinate(j,i))){
-					builder += "| B |";
+					stringBuilder += "| B |";
 				}
 				else{
-					builder += "| _ |";
+					stringBuilder += "| _ |";
 				}
 			}
-			builder += "\n";
+			builder[i] = stringBuilder;
 		}
-		return builder;
+		
+		String result = "";
+		
+		for(int i = this.length -1; i >= 0; i--){
+			result += builder[i];
+			result += "\n";
+		}
+		
+		return result;
 	}
 }

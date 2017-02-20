@@ -11,6 +11,7 @@ public class BreakthroughAgent implements Agent{
 		// TODO Auto-generated method stub
 		board = new Board(width, height, role, playclock);
 		turn = !role.equals("white");
+		System.out.println(board.toString());
 	}
 
 	@Override
@@ -37,6 +38,8 @@ public class BreakthroughAgent implements Agent{
 			
 			AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch();
 			Action nextMove = alphaBetaSearch.search(endTime, board.currentState, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			
+			board = board.update(nextMove, board.role);
 			
 			System.out.println("next move: " + nextMove.toString());
 			System.out.println("Possition1: " + nextMove.position1.toString());
