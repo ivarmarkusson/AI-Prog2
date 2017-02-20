@@ -10,6 +10,7 @@ public class Coordinate {
 	public int x;
 	public int y;
 	
+	/*
 	public Coordinate forward(String orientation){
 		Coordinate next = new Coordinate(this.x, this.y);
 		
@@ -28,11 +29,19 @@ public class Coordinate {
 		
 		return next;
 	}
+	*/
 	
+	@Override
+	public String toString(){
+		return "( " + this.x + ", " + this.y + ")";
+	}
+	
+	@Override
 	public int hashCode(){
 		return (this.x*21143) ^ (this.y*45127);
 	}
 	
+	@Override
 	public boolean equals(Object obj){
 		if(obj == null){
 			return false;

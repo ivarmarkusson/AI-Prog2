@@ -16,28 +16,31 @@ public class BreakthroughAgent implements Agent{
 	@Override
 	public String nextAction(int[] lastmove) {
 		
-		if(lastmove != null){
+		if(lastmove != null && !turn){
 			Action lastTurn = new Action(lastmove);
     		String roleOfLastPlayer;
     		
-    		if(turn && board.role.equals("white") || !turn && board.role.equals("black")){
-    			roleOfLastPlayer = "white";
+    		if(board.role.equals("white")){
+    			roleOfLastPlayer = "black";
     		} 
     		else{
-    			roleOfLastPlayer = "black";
+    			roleOfLastPlayer = "white";
     		}
-   			System.out.println(roleOfLastPlayer + lastTurn.toString());
-    		
-   			board.update(new Action(lastmove), roleOfLastPlayer);
+   			System.out.println("LAST MOVE: " + roleOfLastPlayer + lastTurn.toString());
+   			board = board.update(new Action(lastmove), roleOfLastPlayer);
 		}
 		
 		
 		turn = !turn;
 		if(turn){	
 			long endTime = System.currentTimeMillis() + board.time * 1000;
-			AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(board);
-			Action nextMove = alphaBetaSearch.search(endTime, board.initialState, Integer.MIN_VALUE, Integer.MAX_VALUE);
 			
+			AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch();
+			Action nextMove = alphaBetaSearch.search(endTime, board.currentState, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			
+			System.out.println("next move: " + nextMove.toString());
+			System.out.println("Possition1: " + nextMove.position1.toString());
+			System.out.println("Possition2: " + nextMove.position2.toString());
 			return nextMove.toString();
 		} 
 		else{

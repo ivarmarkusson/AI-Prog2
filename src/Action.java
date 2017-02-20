@@ -32,4 +32,25 @@ public class Action {
 		
 		return list;
 	}
+	@Override
+	public boolean equals(Object obj){
+		if(obj == null){
+			return false;
+		}
+		if(!this.getClass().isAssignableFrom(obj.getClass())){
+			return false;
+		}
+		
+		final Action comparison = (Action) obj;
+		
+		if(!this.position1.equals(comparison.position1) || !this.position2.equals(comparison.position2)){
+			return false;
+		}
+		
+		return true;
+	}
+	@Override
+	public int hashCode(){
+		return this.position1.hashCode()*21143 ^ this.position2.hashCode()*45127;
+	}
 }

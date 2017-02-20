@@ -9,27 +9,51 @@ public class Pawn {
 		location = coordinate;
 		color = pawnColor;
 	}
-	
-	public void moves(String action){
-		if(action.equals("forward")){
-			int xCoord = this.location.x;
-			int yCoord = this.location.y +1;
-			
-			this.location = new Coordinate(xCoord, yCoord);
+	/*	Is not used
+	public void move(String action){
+		if(color.equals("white")){
+		
+			if(action.equals("forward")){
+				int xCoord = this.location.x;
+				int yCoord = this.location.y +1;
+				
+				this.location = new Coordinate(xCoord, yCoord);
+			}
+			else if(action.equals("capture_right")){
+				int xCoord = this.location.x +1;
+				int yCoord = this.location.y +1;
+				
+				this.location = new Coordinate(xCoord, yCoord);
+			}
+			else if(action.equals("capture_left")){
+				int xCoord = this.location.x -1;
+				int yCoord = this.location.y +1;
+				
+				this.location = new Coordinate(xCoord, yCoord);
+			}
 		}
-		else if(action.equals("capture_right")){
-			int xCoord = this.location.x +1;
-			int yCoord = this.location.y +1;
-			
-			this.location = new Coordinate(xCoord, yCoord);
-		}
-		else if(action.equals("capture_left")){
-			int xCoord = this.location.x -1;
-			int yCoord = this.location.y +1;
-			
-			this.location = new Coordinate(xCoord, yCoord);
+		else{
+			if(action.equals("forward")){
+				int xCoord = this.location.x;
+				int yCoord = this.location.y -1;
+				
+				this.location = new Coordinate(xCoord, yCoord);
+			}
+			else if(action.equals("capture_right")){
+				int xCoord = this.location.x +1;
+				int yCoord = this.location.y -1;
+				
+				this.location = new Coordinate(xCoord, yCoord);
+			}
+			else if(action.equals("capture_left")){
+				int xCoord = this.location.x -1;
+				int yCoord = this.location.y -1;
+				
+				this.location = new Coordinate(xCoord, yCoord);
+			}
 		}
 	}
+	*/
 	
 	@Override
 	public boolean equals(Object obj){
@@ -53,7 +77,7 @@ public class Pawn {
 	
 	@Override
 	public int hashCode(){
-		return this.location.hashCode() * this.color.hashCode();
+		return this.location.hashCode()*21143 ^ this.color.hashCode()*45127;
 	}
 	
 }

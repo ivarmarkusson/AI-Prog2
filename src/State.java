@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class State {
-	Board board;
-	Action firstActionToState;
-	int score;
+	public Board board;
+	public Action firstActionToState;
+	public int score;
 	
-	State(Board b, Action action){
+	State(Board b, Action action, int stateScore){
 		board = b;
 		firstActionToState = action;
-		score = 0;
+		score = stateScore;
 	}
 	
 	public int getScoreFromAction(Action action){
@@ -21,7 +21,7 @@ public class State {
 					score++;
 					return score;
 				}
-				if(goalState()){
+				if(this.goalState()){
 					score += 100;
 					return score;
 				}
@@ -50,12 +50,9 @@ public class State {
 	
 	public State succesorState(Action action){
 		
-		//We need to move this to the constructor and it should hold the action of the first Action
-		if(action == null){
-			return null;
-		}
-
-		State succesorState = new State(board.update(action, board.role), this.firstActionToState);
+		//TODO Need to implement this within this state not by updating board!?
+		State succesorState = new State(board.update(action, board.role), this.firstActionToState, this.score);
+		
 		
 		return succesorState;
 	}
