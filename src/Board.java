@@ -19,7 +19,6 @@ public class Board {
 		length = tableLength;
 		role = playersRole;
 		time = playClock;
-		currentState = new State(this, null, 0);
 				
 		HashMap<Coordinate, Pawn> initialWhite = new HashMap<Coordinate, Pawn>();
 		HashMap<Coordinate, Pawn> initialBlack = new HashMap<Coordinate, Pawn>();
@@ -68,6 +67,7 @@ public class Board {
 		}
 		whitePawns = initialWhite;
 		blackPawns = initialBlack;
+		currentState = new State(this, null, 0);
 	}
 	
 	Board(Board copy){

@@ -36,9 +36,9 @@ public class BreakthroughAgent implements Agent{
 		if(turn){	
 			long endTime = System.currentTimeMillis() + board.time * 1000;
 			
-			AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch();
-			Action nextMove = alphaBetaSearch.search(endTime, board.currentState, Integer.MIN_VALUE, Integer.MAX_VALUE);
-			
+			AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(board);
+			Action nextMove = alphaBetaSearch.rootSearch(endTime, board.currentState, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			System.out.println("NEXT ACTION: " + nextMove.toString());
 			board = board.update(nextMove, board.role);
 			
 			System.out.println("next move: " + nextMove.toString());

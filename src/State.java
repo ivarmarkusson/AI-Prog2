@@ -14,7 +14,28 @@ public class State {
 		score = stateScore;
 	}
 	
-	public int getScoreFromAction(Action action){
+	public boolean isTerminal(){
+		if(this.goalState() || this.legalActions().isEmpty() || this.board.blackPawns.isEmpty() || this.board.whitePawns.isEmpty()){
+			return true;
+		}
+		
+		if(this.board.role.equals("white")){
+			for(Coordinate coord : this.board.whitePawns.keySet()){
+				if(coord.y == this.board.length -1){
+					return true;
+				}
+			}
+		}
+		else{
+			for(Coordinate coord : this.board.blackPawns.keySet()){
+				if(coord.y == 0){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	public int setScoreFromAction(Action action){
 			
 			if(board.role.equals("white")){
 				if(board.blackPawns.containsKey(action.position2)){
