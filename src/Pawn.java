@@ -2,8 +2,24 @@ package prog2;
 
 public class Pawn {
 
-	Coordinate location;
-	String color;
+	private Coordinate location;
+	private String color;
+	
+	public void setLocation(Coordinate coord){
+		this.location = coord;
+	}
+	
+	public void setColor(String col){
+		this.color = col;
+	}
+	
+	public Coordinate getLocation(){
+		return this.location;
+	}
+	
+	public String getColor(){
+		return this.color;
+	}
 	
 	Pawn(Coordinate coordinate, String pawnColor){
 		location = coordinate;

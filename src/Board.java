@@ -67,7 +67,7 @@ public class Board {
 		}
 		whitePawns = initialWhite;
 		blackPawns = initialBlack;
-		currentState = new State(this, null, 0);
+		currentState = new State(this);
 	}
 	
 	Board(Board copy){
@@ -76,7 +76,7 @@ public class Board {
 		this.role = copy.role;
 		this.time = copy.time;
 		
-		State newState = new State(copy, copy.currentState.firstActionToState, copy.currentState.score);
+		State newState = new State(copy);
 		this.currentState = newState;
 		
 		this.whitePawns = new HashMap<Coordinate, Pawn>(copy.whitePawns);
@@ -84,39 +84,30 @@ public class Board {
 	}
 	
 	public Board update(Action action, String playerRole){
+		
 		Board newBoard = new Board(this);
+		Coordinate coord1 = new Coordinate(action.getPosition1().x, action.getPosition1().y);
+		Coordinate coord2 = new Coordinate(action.getPosition2().x, action.getPosition2().y);
 		
 		if(playerRole.equals("white")){
-			Pawn curr = newBoard.whitePawns.remove(action.position1);
-			if(newBoard.blackPawns.containsKey(action.position2)){
-				newBoard.blackPawns.remove(action.position2);
+			Pawn curr = newBoard.whitePawns.remove(coord1);
+			if(newBoard.blackPawns.containsKey(action.getPosition2())){
+				newBoard.blackPawns.remove(coord2);
 			}
-			curr.location = action.position2;
-			newBoard.whitePawns.put(action.position2, curr);
+			curr.setLocation(action.getPosition2());
+			newBoard.whitePawns.put(action.getPosition2(), curr);
 		}
 		else{
-			Pawn curr = newBoard.blackPawns.remove(action.position1);
-			if(newBoard.whitePawns.containsKey(action.position2)){
-				newBoard.whitePawns.remove(action.position2);
+			Pawn curr = newBoard.blackPawns.remove(coord1);
+			if(newBoard.whitePawns.containsKey(action.getPosition2())){
+				newBoard.whitePawns.remove(coord2);
 			}
-			curr.location = action.position2;
-			newBoard.blackPawns.put(action.position2, curr);
+			curr.setLocation(action.getPosition2());
+			newBoard.blackPawns.put(action.getPosition2(), curr);
 		}
-		newBoard.currentState = new State(newBoard, null, 0);
+		newBoard.currentState = new State(newBoard);
 		return newBoard;
 	}
-	
-	/*	Is not used
-	public void capture(Pawn pawn, String action){
-		if(action.equals("turn_right")){
-			pawn.move("turn_right");
-			
-		}
-		else if(action.equals("turn_left")){
-			
-		}
-	}
-	*/
 	
 	@Override
 	public String toString(){

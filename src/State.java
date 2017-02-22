@@ -6,73 +6,87 @@ import java.util.List;
 public class State {
 	public Board board;
 	public Action firstActionToState;
-	public int score;
+	private String results;
 	
-	State(Board b, Action action, int stateScore){
+	State(Board b){
 		board = b;
-		firstActionToState = action;
-		score = stateScore;
 	}
 	
 	public boolean isTerminal(){
-		if(this.goalState() || this.legalActions().isEmpty() || this.board.blackPawns.isEmpty() || this.board.whitePawns.isEmpty()){
+		if(this.goalState()){
+			this.results = "win";
 			return true;
 		}
 		
-		if(this.board.role.equals("white")){
-			for(Coordinate coord : this.board.whitePawns.keySet()){
-				if(coord.y == this.board.length -1){
+		if(this.legalActions().isEmpty() || this.board.blackPawns.isEmpty() || this.board.whitePawns.isEmpty()){
+			this.results = "draw";
+			return true;
+		}
+		
+		if(board.role.equals("white")){
+			for(Coordinate pawn : board.blackPawns.keySet()){
+				if(pawn.y == 0){
+					this.results = "lost";
 					return true;
 				}
 			}
 		}
 		else{
-			for(Coordinate coord : this.board.blackPawns.keySet()){
-				if(coord.y == 0){
+			for(Coordinate pawn : board.whitePawns.keySet()){
+				if(pawn.y +1 == board.length){
+					this.results = "lost";
 					return true;
 				}
 			}
 		}
+		
 		return false;
 	}
-	public int setScoreFromAction(Action action){
-			
-			if(board.role.equals("white")){
-				if(board.blackPawns.containsKey(action.position2)){
-					this.score++;
-					return this.score;
-				}
-				if(this.goalState()){
-					this.score += 100;
-					return this.score;
-				}
-			}
-			else{
-				if(board.whitePawns.containsKey(action.position2)){
-					this.score++;
-					return this.score;
-				}
-				if(goalState()){
-					this.score += 100;
-					return this.score;
-				}
-			}
-			
-			return this.score;
-			
-			// TODO 
-			// +1 if capture
-			// -1 if captured
-			// + 100 if won
-			// - 100 if lost
-			// + 50 if draw
-			// returns highest score
-	}
 	
+	public int evaluate(){
+		if(this.isTerminal()){
+			if(this.results == "won"){
+				return 100;
+			}
+			else if(this.results == "lost"){
+				return 0;
+			}
+			else if(this.results == "draw"){
+				return 50;
+			}
+		}
+		
+		int maxWhite = 0;
+		int maxBlack = 100;
+		
+		for(Coordinate coord : this.board.whitePawns.keySet()){
+			if(coord.y > maxWhite){
+				maxWhite = coord.y;
+			}
+		}
+		
+		for(Coordinate coord : this.board.blackPawns.keySet()){
+			if(coord.y < maxBlack){
+				maxBlack = coord.y;
+			}
+		}
+		
+		maxBlack = (board.length -1) - maxBlack;
+		
+		if(this.board.role.equals("white")){
+			return 50 + maxWhite - maxBlack;
+		}
+		else{
+			return 50 + maxBlack - maxWhite;
+		}
+		
+
+	}
+
 	public State succesorState(Action action){
 		
 		//TODO Need to implement this within this state not by updating board!?
-		State succesorState = new State(board.update(action, board.role), this.firstActionToState, this.score);
+		State succesorState = new State(board.update(action, board.role));
 		
 		
 		return succesorState;
@@ -81,7 +95,7 @@ public class State {
 	public boolean goalState(){
 		if(board.role.equals("white")){
 			for(Coordinate pawn : board.whitePawns.keySet()){
-				if(pawn.y +1 == board.length){
+				if(pawn.y == board.length -1){
 					return true;
 				}
 			}
@@ -103,7 +117,7 @@ public class State {
 		
 		if(role.equals("white")){	//White
 			for(Coordinate coord : board.whitePawns.keySet()){	//move forward
-				if(this.board.length <= coord.y +1){	//If pawn goes out of the board
+				if(this.board.length -1 <= coord.y){	//If pawn goes out of the board
 					//do nothing
 					continue;
 				}
@@ -123,7 +137,7 @@ public class State {
 		}
 		else{	//Black
 			for(Coordinate coord : board.blackPawns.keySet()){	//move forward
-				if(0 >= coord.y +1){	//If pawn goes out of the board
+				if(0 >= coord.y){	//If pawn goes out of the board
 					//do nothing
 					continue;
 				}

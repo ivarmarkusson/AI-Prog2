@@ -8,17 +8,18 @@ public class BreakthroughAgent implements Agent{
 	
 	@Override
 	public void init(String role, int width, int height, int playclock) {
-		// TODO Auto-generated method stub
 		board = new Board(width, height, role, playclock);
 		turn = !role.equals("white");
-		System.out.println(board.toString());
 	}
 
 	@Override
 	public String nextAction(int[] lastmove) {
+
+		System.out.println(board.toString());
 		
 		if(lastmove != null && !turn){
-			Action lastTurn = new Action(lastmove);
+			Action lastTurn = new Action(new Coordinate(lastmove[0] -1, lastmove[1] -1), new Coordinate(lastmove[2] -1, lastmove[3] -1));
+
     		String roleOfLastPlayer;
     		
     		if(board.role.equals("white")){
@@ -27,8 +28,8 @@ public class BreakthroughAgent implements Agent{
     		else{
     			roleOfLastPlayer = "white";
     		}
-   			System.out.println("LAST MOVE: " + roleOfLastPlayer + lastTurn.toString());
-   			board = board.update(new Action(lastmove), roleOfLastPlayer);
+   			
+    		board = board.update(lastTurn, roleOfLastPlayer);
 		}
 		
 		
@@ -37,13 +38,13 @@ public class BreakthroughAgent implements Agent{
 			long endTime = System.currentTimeMillis() + board.time * 1000;
 			
 			AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(board);
-			Action nextMove = alphaBetaSearch.rootSearch(endTime, board.currentState, Integer.MIN_VALUE, Integer.MAX_VALUE);
-			System.out.println("NEXT ACTION: " + nextMove.toString());
+			
+			int depth = 50;
+			//for(int i = 4; )
+			Action nextMove = alphaBetaSearch.rootSearch(depth, endTime, board.currentState, 0, 100);
+			
 			board = board.update(nextMove, board.role);
 			
-			System.out.println("next move: " + nextMove.toString());
-			System.out.println("Possition1: " + nextMove.position1.toString());
-			System.out.println("Possition2: " + nextMove.position2.toString());
 			return nextMove.toString();
 		} 
 		else{

@@ -2,8 +2,21 @@ package prog2;
 
 public class Action {
 	
-	Coordinate position1;
-	Coordinate position2;
+	private Coordinate position1;
+	private Coordinate position2;
+	
+	public void setPosition1(Coordinate coord){
+		this.position1 = coord;
+	}
+	public void setPosition2(Coordinate coord){
+		this.position2 = coord;
+	}
+	public Coordinate getPosition1(){
+		return this.position1;
+	}
+	public Coordinate getPosition2(){
+		return this.position2;
+	}
 	
 	Action(int[] locations){
 		position1 = new Coordinate(locations[0], locations[1]);
