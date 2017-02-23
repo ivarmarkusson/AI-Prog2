@@ -1,4 +1,4 @@
-package prog2;
+//package prog2;
 
 public class AlphaBetaSearch {
 
@@ -11,7 +11,12 @@ public class AlphaBetaSearch {
 	
 	public int search(int depth, long time, State state, int alpha, int beta){
 		//Time out or terminale state
-		if(state.isTerminal() || System.currentTimeMillis() >= time || depth <= 0){
+		
+		if(System.currentTimeMillis() >= time){
+			throw new TimeOutException();
+		}
+		
+		if(state.isTerminal() || depth <= 0){
 			return state.evaluate();
 		}
 		

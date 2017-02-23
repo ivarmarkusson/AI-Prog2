@@ -1,4 +1,4 @@
-package prog2;
+//package prog2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +88,6 @@ public class State {
 		//TODO Need to implement this within this state not by updating board!?
 		State succesorState = new State(board.update(action, board.role));
 		
-		
 		return succesorState;
 	}
 	
@@ -117,7 +116,7 @@ public class State {
 		
 		if(role.equals("white")){	//White
 			for(Coordinate coord : board.whitePawns.keySet()){	//move forward
-				if(this.board.length -1 <= coord.y){	//If pawn goes out of the board
+				if(this.board.length -1 < coord.y){	//If pawn goes out of the board
 					//do nothing
 					continue;
 				}
@@ -137,7 +136,7 @@ public class State {
 		}
 		else{	//Black
 			for(Coordinate coord : board.blackPawns.keySet()){	//move forward
-				if(0 >= coord.y){	//If pawn goes out of the board
+				if(0 > coord.y){	//If pawn goes out of the board
 					//do nothing
 					continue;
 				}

@@ -1,4 +1,4 @@
-package prog2;
+//package prog2;
 
 
 public class BreakthroughAgent implements Agent{
@@ -36,17 +36,24 @@ public class BreakthroughAgent implements Agent{
 		turn = !turn;
 		if(turn){	
 			long endTime = System.currentTimeMillis() + board.time * 1000;
+			Action nextMove = new Action(null, null);
 			
 			AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(board);
-			
-			int depth = 50;
-			//for(int i = 4; )
-			Action nextMove = alphaBetaSearch.rootSearch(depth, endTime, board.currentState, 0, 100);
-			
-			board = board.update(nextMove, board.role);
-			
-			return nextMove.toString();
-		} 
+			try{
+			//int depth = 50;
+				for(int i = 4; ; i++){
+					nextMove = alphaBetaSearch.rootSearch(i, endTime, board.currentState, 0, 100);
+					if(false){
+						break;
+					}
+				}
+				board = board.update(nextMove, board.role);
+				return nextMove.toString();
+			}
+			catch(Exception e){
+				return nextMove.toString();
+			}
+		}
 		else{
 			return "noop";
 		}
