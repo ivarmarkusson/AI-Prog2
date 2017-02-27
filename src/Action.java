@@ -1,4 +1,4 @@
-//package prog2;
+package prog2;
 
 public class Action {
 	

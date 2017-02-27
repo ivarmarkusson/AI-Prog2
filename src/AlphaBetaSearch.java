@@ -1,12 +1,13 @@
-//package prog2;
+package prog2;
 
 public class AlphaBetaSearch {
 
 	Board board;
+	Statistics statistics;
 	
-	
-	AlphaBetaSearch(Board _board){
+	AlphaBetaSearch(Board _board, Statistics _statistics){
 		board = _board;
+		statistics = _statistics;
 	}
 	
 	public int search(int depth, long time, State state, int alpha, int beta){
@@ -24,7 +25,7 @@ public class AlphaBetaSearch {
 		
 		//loop through successor states and calls this function recursively
 		for(Action action : state.legalActions()){
-			
+			statistics.stateExpansions++;
 			State succesorState = state.succesorState(action);
 			
 			int value = -search(depth -1, time, succesorState, -beta, -alpha);
@@ -54,6 +55,7 @@ public class AlphaBetaSearch {
 		
 		//loop through successor states and calls this function recursively
 		for(Action action : state.legalActions()){
+			statistics.stateExpansions++;
 			State succesorState = state.succesorState(action);
 			
 			int value = -search(depth -1, time, succesorState, -beta, -alpha);

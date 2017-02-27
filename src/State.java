@@ -1,4 +1,4 @@
-//package prog2;
+package prog2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,8 +84,6 @@ public class State {
 	}
 
 	public State succesorState(Action action){
-		
-		//TODO Need to implement this within this state not by updating board!?
 		State succesorState = new State(board.update(action, board.role));
 		
 		return succesorState;
@@ -116,40 +114,38 @@ public class State {
 		
 		if(role.equals("white")){	//White
 			for(Coordinate coord : board.whitePawns.keySet()){	//move forward
-				if(this.board.length -1 < coord.y){	//If pawn goes out of the board
-					//do nothing
-					continue;
-				}
-				if(!board.blackPawns.containsKey(new Coordinate(coord.x, coord.y +1)) && !board.whitePawns.containsKey(new Coordinate(coord.x, coord.y +1))){
+				Coordinate forwardCoord = new Coordinate(coord.x, coord.y +1);
+				if(!board.blackPawns.containsKey(forwardCoord) && !board.whitePawns.containsKey(forwardCoord)){
 					Action forward = new Action(coord, new Coordinate(coord.x, coord.y +1));
 					legalActions.add(forward);
 				}
-				if(board.blackPawns.containsKey(new Coordinate(coord.x +1, coord.y +1))){	//capture right pawn
-					Action right = new Action(coord, new Coordinate(coord.x +1, coord.y +1));
+				Coordinate rightCoord = new Coordinate(coord.x +1, coord.y +1);
+				if(board.blackPawns.containsKey(rightCoord)){	//capture right pawn
+					Action right = new Action(coord, rightCoord);
 					legalActions.add(right);
 				}
-				if(board.blackPawns.containsKey(new Coordinate(coord.x -1, coord.y +1))){	//capture left pawn
-					Action left = new Action(coord, new Coordinate(coord.x -1, coord.y +1));
+				Coordinate leftCoord = new Coordinate(coord.x -1, coord.y +1);
+				if(board.blackPawns.containsKey(leftCoord)){	//capture left pawn
+					Action left = new Action(coord, leftCoord);
 					legalActions.add(left);
 				}
 			}
 		}
 		else{	//Black
 			for(Coordinate coord : board.blackPawns.keySet()){	//move forward
-				if(0 > coord.y){	//If pawn goes out of the board
-					//do nothing
-					continue;
-				}
-				if(!board.blackPawns.containsKey(new Coordinate(coord.x, coord.y -1)) && !board.whitePawns.containsKey(new Coordinate(coord.x, coord.y -1))){
-					Action forward = new Action(coord, new Coordinate(coord.x, coord.y -1));
+				Coordinate forwardCoord = new Coordinate(coord.x, coord.y -1);
+				if(!board.blackPawns.containsKey(forwardCoord) && !board.whitePawns.containsKey(forwardCoord)){
+					Action forward = new Action(coord, forwardCoord);
 					legalActions.add(forward);
 				}
-				if(board.whitePawns.containsKey(new Coordinate(coord.x +1, coord.y -1))){	//capture right pawn
-					Action right = new Action(coord, new Coordinate(coord.x +1, coord.y -1));
+				Coordinate rightCoord = new Coordinate(coord.x +1, coord.y -1);
+				if(board.whitePawns.containsKey(rightCoord)){	//capture right pawn
+					Action right = new Action(coord, rightCoord);
 					legalActions.add(right);
 				}
-				if(board.whitePawns.containsKey(new Coordinate(coord.x -1, coord.y -1))){	//capture left pawn
-					Action left = new Action(coord, new Coordinate(coord.x -1, coord.y -1));
+				Coordinate leftCoord = new Coordinate(coord.x -1, coord.y -1);
+				if(board.whitePawns.containsKey(leftCoord)){	//capture left pawn
+					Action left = new Action(coord, leftCoord);
 					legalActions.add(left);
 				}
 			}

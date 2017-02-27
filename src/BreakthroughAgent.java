@@ -1,21 +1,23 @@
-//package prog2;
+package prog2;
 
 
 public class BreakthroughAgent implements Agent{
 
 	Board board;
 	boolean turn;
+	private int depthEstimate;
+	Statistics statistics;
 	
 	@Override
 	public void init(String role, int width, int height, int playclock) {
 		board = new Board(width, height, role, playclock);
 		turn = !role.equals("white");
+		depthEstimate = (board.length -1) * 2 + (board.length -2) * 2;
+		statistics = new Statistics();
 	}
 
 	@Override
 	public String nextAction(int[] lastmove) {
-
-		System.out.println(board.toString());
 		
 		if(lastmove != null && !turn){
 			Action lastTurn = new Action(new Coordinate(lastmove[0] -1, lastmove[1] -1), new Coordinate(lastmove[2] -1, lastmove[3] -1));
@@ -30,27 +32,38 @@ public class BreakthroughAgent implements Agent{
     		}
    			
     		board = board.update(lastTurn, roleOfLastPlayer);
+    		
+    		depthEstimate--;
 		}
 		
 		
 		turn = !turn;
 		if(turn){	
-			long endTime = System.currentTimeMillis() + board.time * 1000;
+			
+			long startTime = System.currentTimeMillis();
+			long endTime = startTime + board.time * 1000;
+						
+			AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(board, statistics);
 			Action nextMove = new Action(null, null);
 			
-			AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(board);
 			try{
-			//int depth = 50;
-				for(int i = 4; ; i++){
-					nextMove = alphaBetaSearch.rootSearch(i, endTime, board.currentState, 0, 100);
-					if(false){
-						break;
-					}
+				for(int depth = 1; depth <= depthEstimate; depth++){
+					statistics.currentDepthLimit = depth;
+					long iterationStartTime = System.currentTimeMillis();
+					nextMove = alphaBetaSearch.rootSearch(depth, endTime, board.currentState, 0, 100);
+					statistics.currentIterationSearchTime = (System.currentTimeMillis() - iterationStartTime) / 1000;
 				}
+				
+				statistics.totalRuntime = (System.currentTimeMillis() - startTime) / 1000;
 				board = board.update(nextMove, board.role);
+				depthEstimate--;
+				System.out.println("Number of states expanded: " + statistics.stateExpansions);
 				return nextMove.toString();
 			}
-			catch(Exception e){
+			catch(TimeOutException e){
+				statistics.totalRuntime = (System.currentTimeMillis() - startTime) / 1000;				
+				board = board.update(nextMove, board.role);
+				depthEstimate--;
 				return nextMove.toString();
 			}
 		}
