@@ -44,6 +44,44 @@ public class State {
 		return false;
 	}
 	
+	private boolean opponentCanWinInNextMove(String colorOfOpponent, Coordinate pawn){
+		if(colorOfOpponent.equals("white")){
+			if(pawn.y == (board.length -1) -1){
+				Coordinate forward = new Coordinate(pawn.x, pawn.y +1);
+				Coordinate right = new Coordinate(pawn.x +1, pawn.y +1);
+				Coordinate left = new Coordinate(pawn.x -1, pawn.y +1);
+				
+				if(!board.blackPawns.containsKey(forward)){	//Case: there is no pawn in the way
+					return true;
+				}
+				else if(board.blackPawns.containsKey(right) || board.blackPawns.containsKey(left)){ //case: there is a pawn that the enemy can capture in next turn
+					return true;
+				}
+				else{	//case: there is a pawn in the way
+					return false;
+				}
+			}
+		}
+		else{
+			if(pawn.y == 1){
+				Coordinate forward = new Coordinate(pawn.x, pawn.y -1);
+				Coordinate right = new Coordinate(pawn.x +1, pawn.y -1);
+				Coordinate left = new Coordinate(pawn.x -1, pawn.y -1);
+				
+				if(!board.whitePawns.containsKey(forward)){	//Case: there is no pawn in the way
+					return true;
+				}
+				else if(board.whitePawns.containsKey(right) || board.whitePawns.containsKey(left)){ //case: there is a pawn that the enemy can capture in next turn
+					return true;
+				}
+				else{	//case: there is a pawn in the way
+					return false;
+				}
+			}
+		}
+		
+		return false;
+	}
 	public int evaluate(){
 		if(this.isTerminal()){
 			if(this.results.equals("won")){
@@ -60,21 +98,31 @@ public class State {
 		int maxWhite = 0;
 		int maxBlack = 100;
 		
-		if(this.board.role.equals("white")){
-			for(Coordinate coord : this.board.whitePawns.keySet()){
-				if(coord.y > maxWhite){
-					maxWhite = coord.y;
-				}
+		for(Coordinate coord : this.board.whitePawns.keySet()){
+			if(board.role.equals("black") && opponentCanWinInNextMove("white", coord)){
+				return 1;
 			}
+			if(coord.y > maxWhite){
+				maxWhite = coord.y;
+			}
+		}
+		
+		for(Coordinate coord : this.board.blackPawns.keySet()){
+			if(board.role.equals("white") && opponentCanWinInNextMove("black", coord)){
+				return 1;
+			}
+			if(coord.y < maxBlack){
+				maxBlack = coord.y;
+			}
+		}
+		
+		maxBlack = (board.length -1) - maxBlack;
+		
+		if(this.board.role.equals("white")){
+			
 			return 50 + maxWhite - maxBlack;
 		}
 		else{
-			for(Coordinate coord : this.board.blackPawns.keySet()){
-				if(coord.y < maxBlack){
-					maxBlack = coord.y;
-				}
-			}
-			maxBlack = (board.length -1) - maxBlack;
 			return 50 + maxBlack - maxWhite;
 		}	
 	}

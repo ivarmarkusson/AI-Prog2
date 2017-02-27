@@ -75,10 +75,13 @@ public class BreakthroughAgent implements Agent{
 		}
 	}
 
-	// TODO this method executes after a match, the use of it is to get the agent ready for next match.
 	@Override
 	public void cleanup() {
-		// TODO Auto-generated method stub
+		Board nextBoard = new Board(board.width, board.length, board.role, board.time);
+		board = nextBoard;
+		turn = !board.role.equals("white");
+		depthEstimate = ((board.length -1) * 2 + (board.length -2) * 2) * board.width +1;
+		statistics = new Statistics();
 		
 	}
 
