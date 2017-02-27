@@ -76,11 +76,12 @@ public class Board {
 		this.role = copy.role;
 		this.time = copy.time;
 		
+		this.whitePawns = new HashMap<Coordinate, Pawn>(copy.whitePawns);
+		this.blackPawns = new HashMap<Coordinate, Pawn>(copy.blackPawns);
+		
 		State newState = new State(copy);
 		this.currentState = newState;
 		
-		this.whitePawns = new HashMap<Coordinate, Pawn>(copy.whitePawns);
-		this.blackPawns = new HashMap<Coordinate, Pawn>(copy.blackPawns);
 	}
 	
 	public Board update(Action action, String playerRole){
@@ -90,7 +91,8 @@ public class Board {
 		Coordinate coord2 = new Coordinate(action.getPosition2().x, action.getPosition2().y);
 		
 		if(playerRole.equals("white")){
-			Pawn curr = newBoard.whitePawns.remove(coord1);
+			Pawn curr = new Pawn(coord1, "white");
+			newBoard.whitePawns.remove(coord1);
 			if(newBoard.blackPawns.containsKey(action.getPosition2())){
 				newBoard.blackPawns.remove(coord2);
 			}
@@ -98,7 +100,8 @@ public class Board {
 			newBoard.whitePawns.put(action.getPosition2(), curr);
 		}
 		else{
-			Pawn curr = newBoard.blackPawns.remove(coord1);
+			Pawn curr = new Pawn(coord1, "black");
+			newBoard.blackPawns.remove(coord1);
 			if(newBoard.whitePawns.containsKey(action.getPosition2())){
 				newBoard.whitePawns.remove(coord2);
 			}

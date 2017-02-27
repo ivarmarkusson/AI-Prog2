@@ -47,6 +47,10 @@ public class AlphaBetaSearch {
 		
 		//Time out or terminal state
 		if(state.isTerminal() || System.currentTimeMillis() >= time || depth <= 0){
+			System.out.println("Terminal");
+			System.out.println("terminal: " + state.isTerminal());
+			System.out.println("time: " + (System.currentTimeMillis() >= time));
+			System.out.println("depth: " + depth);
 			return null;
 		}
 		
@@ -58,11 +62,15 @@ public class AlphaBetaSearch {
 			statistics.stateExpansions++;
 			State succesorState = state.succesorState(action);
 			
+			if(succesorState.goalState()){
+				return action;
+			}
+			
 			int value = -search(depth -1, time, succesorState, -beta, -alpha);
 			
 			bestScore = Integer.max(bestScore, value);
 			
-			if(bestScore > alpha){
+			if(bestScore >= alpha){
 				alpha = bestScore;
 				bestAction = action;
 			}
